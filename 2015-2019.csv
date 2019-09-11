@@ -118,7 +118,6 @@ Id,Year,Country,happiness Rank(2015-2018),Happiness Rank(per year),Happiness Sco
 117,2015,India,454,117,4.565,0.64499
 118,2015,Sudan,458,118,4.55,0.52107
 119,2015,Haiti,461,119,4.518,0.26673
-120,2015,Congo (Kinshasa),462,120,4.517,0
 121,2015,Nepal,463,121,4.514,0.35997
 122,2015,Ethiopia,466,122,4.512,0.19073
 123,2015,Sierra Leone,468,123,4.507,0.33024
@@ -232,7 +231,6 @@ Id,Year,Country,happiness Rank(2015-2018),Happiness Rank(per year),Happiness Sco
 231,2016,Jamaica,282,73,5.51,0.89333
 232,2016,Croatia,286,74,5.488,1.18649
 233,2016,Hong Kong,293,75,5.458,1.5107
-234,2016,Somalia,294,76,5.44,0
 235,2016,Kosovo,299,77,5.401,0.90145
 236,2016,Turkey,303,78,5.389,1.16492
 237,2016,Indonesia,312,79,5.314,0.95104
@@ -468,7 +466,6 @@ Id,Year,Country,happiness Rank(2015-2018),Happiness Rank(per year),Happiness Sco
 467,2017,Syria,609,152,3.461999893,0.777153134
 468,2017,Tanzania,613,153,3.348999977,0.511135876
 469,2017,Burundi,624,154,2.904999971,0.091622569
-470,2017,Central African Republic,626,155,2.693000078,0
 471,2018,Finland,1,1,7.632,1.305
 472,2018,Norway,2,2,7.594,1.456
 473,2018,Denmark,5,3,7.555,1.351
@@ -566,7 +563,6 @@ Id,Year,Country,happiness Rank(2015-2018),Happiness Rank(per year),Happiness Sco
 565,2018,Vietnam,370,95,5.103,0.715
 566,2018,Indonesia,373,96,5.093,0.899
 567,2018,Bhutan,374,97,5.082,0.796
-568,2018,Somalia,389,98,4.982,0
 569,2018,Cameroon,390,99,4.975,0.535
 570,2018,Bulgaria,396,100,4.933,1.054
 571,2018,Nepal,400,101,4.88,0.425
