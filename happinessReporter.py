@@ -1,5 +1,8 @@
 # Drew Meyers
 
+import csv, sqlite3
+
+
 def main():
     keep_alive = True
     while keep_alive:
@@ -20,3 +23,48 @@ def continue_program():
 
     return answer == 'y'
 
+
+#Requires a csv file name as a string
+#Fills database with values in the csv file. No headers or it will give weird results
+#No return value. Table name is RankTable
+
+def insertYearData(fileName):
+    f = open(fileName)
+    openFile = csv.reader(f)
+    
+    con = sqlite3.connect(":memory:")
+    cur = con.cursor()
+    cur.execute("""CREATE TABLE IF NOT EXISTS RankTable('Country','rank','SD','Positive affect','Negative Affect','Social Support','Freedom','Corruption','Generosity','GDP per Capita','Life Expectancy','Year')""")
+    param = """INSERT INTO 'RankTable' VALUES(?,?,?,?,?,?,?,?,?,?,?,?);"""
+    
+    
+    for row in csvFile:
+        cur.execute(param,row)
+        con.commit()
+
+    cur.execute("SELECT Country FROM RankTable")
+    result= cur.fetchall()
+    con.close()
+
+
+#Requires a csv file name as a string
+#Fills database with values in the csv file. No headers or it will give weird results
+#No return value. Table name is GeneralData
+
+def insertCountryData(FileName):
+    f = open(fileName)
+    openFile = csv.reader(f)
+    param = """INSERT INTO 'GeneralData' VALUES(?,?,?);"""
+    
+    con = sqlite3.connect(":memory:")
+    cur = con.cursor()
+    cur.execute("""CREATE TABLE IF NOT EXISTS GeneralData('Country','reigon','Languages')""")
+    
+    
+    
+    for row in csv_f:
+        cur.execute(param,row)
+        con.commit()
+    
+    cur.execute("SELECT Languages FROM GeneralData")
+    con.close()
