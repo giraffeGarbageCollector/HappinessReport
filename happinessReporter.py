@@ -1,17 +1,33 @@
 # Drew Meyers
 
-import csv, sqlite3
-
+import csv
+import sqlite3
+from CLI import *
+import os
 
 def main():
     keep_alive = True
     while keep_alive:
         #Do stuff
 
-        keep_alive = continue_program()
+        keep_alive = CLI_continue_program()
+        menu_selec = CLI_create_menu()
+        if not CLI_exit_check(menu_selec):
+            CLI_Handler(menu_selec)
+        else:
+            keep_alive = False
 
 
-def continue_program():
+def CLI_Handler(option):
+    option = upper(option)
+    OPTIONS_DICT = {'A': CLI_add_year(), 'B': CLI_search(), 'C': CLI_edit(),
+    'D': CLI_delete(), 'EXIT': '',  'H': CLI_help_screen(), 'M': CLI_create_menu(),
+    'S': CLI_samples()}
+
+    if option in OPTIONS_DICT:
+        cli_response = OPTIONS_DICT[option] #returns a list with [0] being next instruction, [1] data
+
+    def continue_program():
     answer = 'default'
     while answer != 'y' and answer != 'n':
         if answer != 'default': # if the answer is not defualt they are going through loop again and give them hint
@@ -51,7 +67,7 @@ def insertYearData(fileName):
 #Fills database with values in the csv file. No headers or it will give weird results
 #No return value. Table name is GeneralData
 
-def insertCountryData(FileName):
+def insertCountryData(fileName):
     f = open(fileName)
     openFile = csv.reader(f)
     param = """INSERT INTO 'GeneralData' VALUES(?,?,?);"""
@@ -68,3 +84,6 @@ def insertCountryData(FileName):
     
     cur.execute("SELECT Languages FROM GeneralData")
     con.close()
+
+
+main()
