@@ -2,44 +2,40 @@
 
 import csv
 import sqlite3
+
+import CLI
 from CLI import *
 import os
 
 def main():
-    keep_alive = True
+    keep_alive = True #Main sentinel for program
     while keep_alive:
-        #Do stuff
+        menu_selec = CLI.CLI_create_menu() #create a menu every time
 
-        keep_alive = CLI_continue_program()
-        menu_selec = CLI_create_menu()
-        if not CLI_exit_check(menu_selec):
-            CLI_Handler(menu_selec)
+        if not CLI.CLI_exit_check(menu_selec): #check before other function calls for exit command
+            prnt_str = option_handler(menu_selec) #process command and get result string
         else:
-            keep_alive = False
+            keep_alive = False #User did want to exit, setting sentinel
+        print(prnt_str)
+        if keep_alive:
+            keep_alive = CLI.CLI_continue_program()
+        else:
+            print("Thank you for using Happiness Reporter. Have a great day!")
 
-
-def CLI_Handler(option):
-    option = upper(option)
-    OPTIONS_DICT = {'A': CLI_add_year(), 'B': CLI_search(), 'C': CLI_edit(),
-    'D': CLI_delete(), 'EXIT': '',  'H': CLI_help_screen(), 'M': CLI_create_menu(),
-    'S': CLI_samples()}
+'''
+def option_handler(option):
+    option = str.upper(option)
+    OPTIONS_DICT = {'A': CLI.CLI_add_year(), 'B': CLI.CLI_search(), 'C': CLI.CLI_edit(),
+    'D': CLI.CLI_delete(), 'EXIT': '',  'H': CLI.CLI_help_screen(), 'M': CLI.CLI_create_menu(),
+    'S': CLI.CLI_samples()}
 
     if option in OPTIONS_DICT:
-        cli_response = OPTIONS_DICT[option] #returns a list with [0] being next instruction, [1] data
+        OPTIONS_DICT[option]
+    else:
+        print('Option:', option)
+        raise SyntaxError('Invalid Option Selected')
 
-    def continue_program():
-    answer = 'default'
-    while answer != 'y' and answer != 'n':
-        if answer != 'default': # if the answer is not defualt they are going through loop again and give them hint
-            print('Your response could not be understood. Please respond "Yes" or "No"')
-
-        answer = input("Would you like to submit another query? (yes/no): ")
-        if answer:
-            answer = answer[0].lower()
-
-    return answer == 'y'
-
-
+'''
 #Requires a csv file name as a string
 #Fills database with values in the csv file. No headers or it will give weird results
 #No return value. Table name is RankTable
