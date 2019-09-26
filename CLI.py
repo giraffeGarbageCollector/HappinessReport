@@ -1,8 +1,15 @@
 import os
+import happinessReporter
 
-CLI_OPTIONS = ["[A]dd Year Data", "[B]rowse/Search Data", "[C]hange Data",
-               "[D]elete an Entry", "[EXIT] (works everywhere)", "[H]elp", "[M]enu This Menu",
-               "[S]ample Queries"]
+CLI_OPTIONS = {"[A]dd Year Data" :  " - Add data to the database [C]RUD",
+               "[B]rowse/Search Data": " - Search the database C[R]UD",
+               "[C]hange Data": " - Edit database entries CR[U]D",
+               "[D]elete an Entry": " - Delete a database entry CRRU[D]",
+                "[EXIT] (works everywhere)": " - Exit the program now",
+                "[H]elp": " - This menu",
+                "[M]enu This Menu": " - Diplay the menu again" ,
+               "[S]ample Queries": " - Show sample queries to try",
+               }
 
 
 
@@ -33,7 +40,12 @@ def CLI_add_year():
 
 
 def CLI_help_screen():
-    pass
+    help_str = """Welcome To Happiness Reporter\n\n'
+                    COMMANDS:\n
+                    """
+    for key in CLI_OPTIONS:
+        help_str += key + CLI_OPTIONS[key]
+
 
 
 def CLI_search():
