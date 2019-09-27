@@ -105,7 +105,6 @@ def search(validated_search_str):
     results = []
     return results
 
-#TODO
 def search_one(validated_search_str):
     results = search(validated_search_str)
     return results[0]
