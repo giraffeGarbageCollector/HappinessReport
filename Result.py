@@ -3,15 +3,29 @@
 class Result:
     __contents = dict()
 
+    PROPERTIES = ['ID', 'COUNTRY', 'YEAR', 'RANK', 'SCORE', 'GDP']
+
     def __init__(self):
         self.__contents.update('id', None)
+        self.__contents.update('country', None)
         self.__contents.update('year', None)
         self.__contents.update('rank', None)
         self.__contents.update('score', None)
         self.__contents.update('gdp', None)
 
+    def list_values(self):
+        return_str = ''
+        for field in self.__contents:
+            if self.__contents[field] is not None:
+                return_str += "Field: " +field + ", Value: " + self.__contents[field] + "\n"
+
+        return return_str
+
     def set_id(self, id):
         self.__contents.update('id', id)
+
+    def set_country(self, country_name):
+        self.__contents.update('country', country_name)
 
     def set_year(self, year):
         self.__contents.update('year', year)
@@ -27,6 +41,9 @@ class Result:
 
     def get_id(self):
         return self.__contents['id']
+
+    def get_country(self):
+        return self.__contents['country']
 
     def get_year(self):
         return self.__contents['year']

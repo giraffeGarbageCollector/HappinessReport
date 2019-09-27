@@ -85,4 +85,34 @@ def insertCountryData(fileName):
     con.close()
 
 
+#TODO
+#Returns bool for if a query is syntaxtically correct
+def validate_query(query_str):
+    return False
+
+#TODO
+#Updates a country record by id given the field to be updated and the new value
+def update_record(id, field, value):
+    pass
+
+#TODO
+#Remove a db entry given the result object
+def remove_record(result):
+    pass
+
+#TODO
+#Returns the search results of a validated search string. If no results, return the empty array
+def search(validated_search_str):
+    results = []
+    return results
+
+#TODO
+def search_one(validated_search_str):
+    results = search(validated_search_str)
+    return results[0]
+
+#Returns if the result object exists in the database
+def entry_exists(result):
+    return search(result)
+
 main()
