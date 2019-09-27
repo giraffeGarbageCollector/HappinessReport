@@ -13,14 +13,13 @@ def main():
 
         if not CLI_exit_check(menu_selec): #check before other function calls for exit command
             try:
-                prnt_str = option_handler(menu_selec) #process command and get result string
+                option_handler(menu_selec) #process command and get result string
             except SyntaxError:
                 print("Invalid Option. Please Try Again")
         else:
             keep_alive = False #User did want to exit, setting sentinel
-        if keep_alive:
-            keep_alive = CLI_continue_program()
-        else:
+
+        if not keep_alive:
             print("Thank you for using Happiness Reporter. Have a great day!")
 
 

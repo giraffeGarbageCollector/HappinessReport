@@ -8,26 +8,14 @@ CLI_OPTIONS = {"[A]dd Year Data" :  " - Add data to the database [C]RUD",
                "[B]rowse/Search Data": " - Search the database C[R]UD",
                "[C]hange Data": " - Edit database entries CR[U]D",
                "[D]elete an Entry": " - Delete a database entry CRRU[D]",
-                "[EXIT] (works everywhere)": " - Exit the program now",
+                ESCAPE + " (works everywhere)": " - Exit the program now",
                 "[H]elp": " - This menu",
                 "[M]enu This Menu": " - Diplay the menu again" ,
                "[S]ample Queries": " - Show sample queries to try",
                }
 
-
-
-def CLI_continue_program():
-    answer = 'default'
-
-    while answer != 'y' and answer != 'n':
-        if answer != 'default':  # if the answer is not default they are going through loop again and give them hint
-            print('Your response could not be understood. Please respond "Yes" or "No"')
-
-        answer = input("Would you like to submit another query? (yes/no): ")
-        if answer:
-            answer = answer[0].lower()
-
-    return answer == 'y'
+CLI_OPTIONS_LETTERS = [command[2] for command in CLI_OPTIONS.keys()] + [ESCAPE]
+CLI_OPTIONS_LETTERS.remove('E') #to remove exit double entry
 
 
 def CLI_exit_check(command):
@@ -163,18 +151,21 @@ def CLI_samples():
     print(sample_str)
 
 
+#Returns the
 def CLI_create_menu():
     welcome_prompt = "Welcome to the Happiness Reporter!\n Please select from one of the options below:\n"
     selection = ''
-    do_conv = True
+    do_loop_conversion = True
 
-    while selection not in CLI_OPTIONS:
-        if not do_conv:
+    while selection not in CLI_OPTIONS_LETTERS or len(selection) > 1:
+        if not do_loop_conversion:
             print('Not a valid option')
         else:
-            do_conv = False
+            do_loop_conversion = False
             print(welcome_prompt)
-            for option in CLI_OPTIONS:
-                print(option)
-            selection = str.upper(input('Command: '))
+
+        print("To exit, type\"", ESCAPE.lower(), "\"")
+        for option in CLI_OPTIONS:
+            print(option)
+        selection = str.upper(input('Command: '))
     return selection
