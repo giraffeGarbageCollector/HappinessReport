@@ -111,6 +111,6 @@ def search_one(validated_search_str):
 
 #Returns if the result object exists in the database
 def entry_exists(result):
-    return search(result)
+    return len(search(result)) > 0
 
 main()
