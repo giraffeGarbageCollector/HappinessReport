@@ -75,7 +75,6 @@ def insertCountryData(fileName):
     cur.execute("""CREATE TABLE IF NOT EXISTS GeneralData('Country','reigon','Languages')""")
     
     
-    
     for row in csv_file:
         cur.execute(param,row)
         con.commit()

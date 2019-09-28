@@ -2,6 +2,8 @@ import os
 import time
 import happinessReporter
 
+
+
 MENU = "MENU"
 ESCAPE = "EXIT"
 CLI_OPTIONS = {"[A]dd Year Data" :  " - Add data to the database [C]RUD",
@@ -144,7 +146,13 @@ def CLI_delete():
 
 def CLI_samples():
     sample_str = """
-                    "S
+                    Sample:
+                    top happiest countries
+                    zdf
+                    sdf
+                    sdf
+                    sdf
+                    
                     """
             #TODO Finish with the syntax above
 
