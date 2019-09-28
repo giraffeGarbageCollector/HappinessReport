@@ -104,13 +104,12 @@ def search(validated_search_str):
     results = []
     return results
 
-#TODO
 def search_one(validated_search_str):
     results = search(validated_search_str)
     return results[0]
 
 #Returns if the result object exists in the database
 def entry_exists(result):
-    return search(result)
+    return len(search(result)) > 0
 
 main()
