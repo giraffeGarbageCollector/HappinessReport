@@ -12,6 +12,7 @@ CLI_OPTIONS = {"[A]dd Year Data" :  " - Add data to the database [C]RUD",
                "[D]elete an Entry": " - Delete a database entry CRRU[D]",
                 ESCAPE + " (works everywhere)": " - Exit the program now",
                 "[H]elp": " - This menu",
+                "[I]nfo": " - Information about the database",
                 "[M]enu This Menu": " - Diplay the menu again" ,
                "[S]ample Queries": " - Show sample queries to try",
                }
@@ -34,6 +35,22 @@ def CLI_add_year():
 
 def CLI_help_screen():
     help_str = """Welcome To Happiness Reporter\n\n'
+                    SYNTAX:\n
+                    The system is case sensitive, all keywords should be written in CAPITAL letters.\n
+                    Keywords need to not be pluralized, ex COUNTRY not CONTRIES.\n
+                    To see a list of a specific number of records, that number should lead the input.\n
+                    Markers like MOST and LAST should follow a number or be first in the input.\n
+                    To see records a specific year, the Year should end the input.\n
+                    COMMANDS:\n
+                    """
+    for key in CLI_OPTIONS:
+        help_str += key + CLI_OPTIONS[key] + "\n"
+
+    print(help_str)
+
+    
+def CLI_info_screen():
+    info_str = """Welcome To Happiness Reporter\n\n'
                     ABOUT:\n
                     \tFrom the Report (https://worldhappiness.report/):\n
                     \t\t"The World Happiness Report is a landmark survey of the state of global happiness that ranks\n
@@ -41,19 +58,8 @@ def CLI_help_screen():
                     \t\tHappiness Report focuses on happiness and the community: how happiness has evolved over \n
                     \t\tthe past dozen years, with a focus on the technologies, social norms, conflicts and government \n
                     \t\tpolicies that have driven those changes."\n\n
-                    COMMANDS:\n
                     """
-    for key in CLI_OPTIONS:
-        help_str += key + CLI_OPTIONS[key] + "\n"
-
-    help_str += """
-                \nSYNTAX:\n
-                All commands are in CAPITALS.\n
-                *finish*
-                """ # TODO: Finish the syntax
-    print(help_str)
-
-
+    print(info_screen)
 
 def CLI_search():
     q_input = ''
@@ -148,9 +154,9 @@ def CLI_samples():
     sample_str = """
                     Sample:
                     MOST HAPPT COUNTRY
-                    2 MOST HEALTHY SPANISH COUNTRIES
+                    2 MOST HEALTHY SPANISH COUNTRY
                     LEAST CORRUPT REGION 2016
-                    COUNTRIES            
+                    COUNTRY           
                     """
 
     print(sample_str)
