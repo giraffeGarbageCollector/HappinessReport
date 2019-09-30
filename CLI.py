@@ -147,14 +147,11 @@ def CLI_delete():
 def CLI_samples():
     sample_str = """
                     Sample:
-                    top happiest countries
-                    zdf
-                    sdf
-                    sdf
-                    sdf
-                    
+                    MOST HAPPT COUNTRY
+                    2 MOST HEALTHY SPANISH COUNTRIES
+                    LEAST CORRUPT REGION 2016
+                    COUNTRIES            
                     """
-            #TODO Finish with the syntax above
 
     print(sample_str)
 
