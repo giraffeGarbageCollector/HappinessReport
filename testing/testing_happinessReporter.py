@@ -1,4 +1,4 @@
-from happinessReporter import *
+import happinessReporter
 
 
 def main_testing():

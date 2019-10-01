@@ -1,10 +1,13 @@
-# Drew Meyers
-
 import csv
 import sqlite3
+from typing import List
 
 from CLI import *
 import Result # for database interactions
+
+YEAR_MIN = 2015
+YEAR_MAX = 2019
+
 
 def main():
     keep_alive = True #Main sentinel for program
@@ -98,10 +101,76 @@ def update_record(id, field, value):
 def remove_record(result):
     pass
 
-#TODO
+
+def __find_qualifiers(search_upper_split):
+    found_quals = []
+    qualifiers_lst = ['HAPPY' , 'SUPPORTIVE', 'FREE', 'CORRUPT',
+                       'GENEROUS', 'WEALTHY', 'HEALTHY']
+    for qual in qualifiers_lst:
+        if qual in search_upper_split:
+            found_quals.append(qual)
+    return found_quals
+
+
+def __find_rank(search_upper_split):
+    found_rank = None
+    rank_lst = ['TOP', 'Bottom', 'MOST', 'LEAST']
+    for rank in rank_lst:
+        if rank in search_upper_split:
+            if found_rank is None:
+                found_rank = rank
+            else:
+                raise SyntaxError("Too Many Rank Modifiers Found")
+    return found_rank
+
+def __find_nouns(search_upper_split):
+    found_nouns = []
+    noun_lst = ['COUNTRY', 'LANGUAGE', 'REGION']
+    for i in range(len(noun_lst)):
+        if noun_lst[i] in search_upper_split:
+            found_nouns.append(noun_lst[i+1]) ##TODO Needs validation that it is grabbing noun
+    return found_nouns
+
+def __find_numbers_years(search_upper_split):
+    found_years: List[int] = []
+    limit = None
+    for word in search_upper_split:
+        try:
+            num = int(word)
+            if num < 1000:
+                if limit is None:
+                    limit = num
+            elif YEAR_MIN <= num <= YEAR_MAX:
+                found_years.append(num)
+            else:
+                raise SyntaxError("Invalid Number Found")
+        except ValueError:
+            pass
+    return limit, found_years
+
+
 #Returns the search results of a validated search string. If no results, return the empty array
-def search(validated_search_str):
+def search(search_str):
     results = []
+    if validate_query(search_str):
+        sql_query = "SELECT * FROM GeneralData WHERE "
+        descending_order = True
+        search_list_split = search_str.upper().split()
+        try:
+            search_limit, years = __find_numbers_years(search_list_split)
+            qualifiers = __find_qualifiers(search_list_split)
+            nouns = __find_nouns(search_list_split)
+            rank = __find_rank(search_list_split)
+
+            if years:
+                for year in years:
+                    sql_query += "Year == " + year + " AND "
+            for noun in nouns:
+                sql_query += noun
+            sql_query += ""
+        except SyntaxError:
+            print("There was an Error in your search. Please check it and try again")
+
     return results
 
 def search_one(validated_search_str):
