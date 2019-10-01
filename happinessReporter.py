@@ -4,7 +4,7 @@ import csv
 import sqlite3
 
 from CLI import *
-import Result
+import Result # for database interactions
 
 def main():
     keep_alive = True #Main sentinel for program
