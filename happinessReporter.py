@@ -5,8 +5,8 @@ from typing import List
 from CLI import *
 import Result # for database interactions
 
-YEAR_MIN = 2015
-YEAR_MAX = 2019
+YEAR_MIN, YEAR_MAX = 2015, 2019
+
 
 
 def main():
@@ -28,16 +28,18 @@ def main():
 
 def option_handler(option):
     option = str.upper(option)
+    result = None
     options_dict = {'A': CLI_add_year(), 'B': CLI_search(), 'C': CLI_edit(),
                     'D': CLI_delete(), 'EXIT': '',  'H': CLI_help_screen(),
                     'M': CLI_create_menu(), 'S': CLI_samples()}
 
     if option in options_dict:
-        options_dict[option]
+        result = options_dict[option]
     else:
         print('Option:', option)
         raise SyntaxError('Invalid Option Selected')
 
+    return result
 
 #Requires a csv file name as a string
 #Fills database with values in the csv file. No headers or it will give weird results
@@ -101,7 +103,7 @@ def update_record(id, field, value):
 def remove_record(result):
     pass
 
-
+#Returns a list of all qualifiers entered. Unvalidated result returned
 def __find_qualifiers(search_upper_split):
     found_quals = []
     qualifiers_lst = ['HAPPY' , 'SUPPORTIVE', 'FREE', 'CORRUPT',
@@ -111,7 +113,7 @@ def __find_qualifiers(search_upper_split):
             found_quals.append(qual)
     return found_quals
 
-
+#REturns ordering syntax Unvalidated result returned
 def __find_rank(search_upper_split):
     found_rank = None
     rank_lst = ['TOP', 'Bottom', 'MOST', 'LEAST']
@@ -123,14 +125,19 @@ def __find_rank(search_upper_split):
                 raise SyntaxError("Too Many Rank Modifiers Found")
     return found_rank
 
+
+#Returns a list with odd entries the noun syntax and the even index the value. Unvalidated result returned
+#i.e. list = ['Country', 'United States', ....]
 def __find_nouns(search_upper_split):
     found_nouns = []
     noun_lst = ['COUNTRY', 'LANGUAGE', 'REGION']
     for i in range(len(noun_lst)):
         if noun_lst[i] in search_upper_split:
-            found_nouns.append(noun_lst[i+1]) ##TODO Needs validation that it is grabbing noun
+            found_nouns.append(noun_lst[i])
+            found_nouns.append(noun_lst[i+1]) #TODO Needs validation that it is grabbing noun
     return found_nouns
 
+#Returns the search rresult limit (ex show 5: limit =5) and a list with all year(s) requested. Unvalidated result returned
 def __find_numbers_years(search_upper_split):
     found_years: List[int] = []
     limit = None
@@ -164,10 +171,12 @@ def search(search_str):
 
             if years:
                 for year in years:
-                    sql_query += "Year == " + year + " AND "
-            for noun in nouns:
-                sql_query += noun
-            sql_query += ""
+                    sql_query += "`Year` == " + year + " AND "
+            else:
+                sql_query += "`Year` == * AND "
+            for i in range(1,len(nouns)-1):
+                sql_query += "`" + nouns[i-1] + "`" + " == " + nouns[i]
+            #TODO Implement qualifier ordering and rank ordering with loops in similar fashion
         except SyntaxError:
             print("There was an Error in your search. Please check it and try again")
 
