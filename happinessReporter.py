@@ -169,12 +169,13 @@ def search(search_str):
             nouns = __find_nouns(search_list_split)
             rank = __find_rank(search_list_split)
 
-
+            #TODO Validate all of these parts
+            #TODO Validate all of these parts
 
             if years:
                 for year in years:
                     sql_query += "`Year` == " + year + " OR "
-                sql_query = sql_query.rsplit(' ', 1)[0] + ' ' #Remove the last "OR" from the sql query
+                sql_query = sql_query.rsplit(' ', 1)[0] #Remove the last "OR" from the sql query
             sql_query += " ORDER BY "
             if qualifiers:
                 for qual in qualifiers:
@@ -183,7 +184,9 @@ def search(search_str):
             for noun in nouns:
                 pass #TODO add nouns to query
             if rank:
-                sql_query += " LIMIT " + rank
+                sql_query += rank + ' '
+            if search_limit:
+                sql_query += " LIMIT " + search_limit
 
 
             #TODO Submit query to db
