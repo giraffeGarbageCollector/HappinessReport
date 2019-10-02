@@ -58,27 +58,23 @@ def option_handler(option):
 # No return value. Table name is RankTable
 
 def insertYearData(fileName):
-    f = open(fileName)
-    csv_file = csv.reader(f)
+f = open(fileName)
+con = sqlite3.connect(":memory:")
+cur = con.cursor()
+cur.execute("CREATE TABLE IF NOT EXISTS RankTable('ID','YEAR','COUNTRY','HAPPY NOT SINGLE','RANK','HAPPY','WEALTHY');")
+param = "INSERT INTO 'RankTable' VALUES(?,?,?,?,?,?,?);"
 
-    con = sqlite3.connect(":memory:")
-    cur = con.cursor()
-    cur.execute(
-        """CREATE TABLE IF NOT EXISTS RankTable('Country','rank','SD','Positive affect','Negative Affect','Social Support','Freedom','Corruption','Generosity','GDP per Capita','Life Expectancy','Year')""")
-    param = """INSERT INTO 'RankTable' VALUES(?,?,?,?,?,?,?,?,?,?,?,?);"""
+next(csv_file)
+row in csv_file:
+    cur.execute(param, row)
+con.commit()
 
-    for row in csv_file:
-        cur.execute(param, row)
-        con.commit()
-
-    cur.execute("SELECT Country FROM RankTable")
-    result = cur.fetchall()
-    con.close()
-
+con.close()
 
 # Requires a csv file name as a string
 # Fills database with values in the csv file. No headers or it will give weird results
 # No return value. Table name is GeneralData
+
 
 
 def insertCountryData(fileName):
@@ -86,6 +82,7 @@ def insertCountryData(fileName):
     csv_file = csv.reader(f)
     param = """INSERT INTO 'GeneralData' VALUES(?,?,?);"""
 
+    next(csv_file)
     con = sqlite3.connect(":memory:")
     cur = con.cursor()
     cur.execute("""CREATE TABLE IF NOT EXISTS GeneralData('Country','Reigon','Languages')""")
@@ -94,9 +91,7 @@ def insertCountryData(fileName):
         cur.execute(param, row)
         con.commit()
 
-    cur.execute("SELECT Languages FROM GeneralData")
     con.close()
-
 
 # TODO
 # Returns bool for if a query is syntaxtically correct
