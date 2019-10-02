@@ -27,12 +27,25 @@ def main():
 def option_handler(option):
     option = str.upper(option)
     result = None
-    options_dict = {'A': CLI_add_year(), 'B': CLI_search(), 'C': CLI_edit(),
-                    'D': CLI_delete(), 'EXIT': '', 'H': CLI_help_screen(),
-                    'M': CLI_create_menu(), 'S': CLI_samples()}
 
-    if option in options_dict:
-        result = options_dict[option]
+    if option == 'A':
+        CLI_add_year()
+    elif  option == 'B':
+        CLI_search()
+    elif option == 'B':
+        CLI_search()
+    elif option == 'C':
+        CLI_edit()
+    elif option == 'D':
+        CLI_delete()
+    elif option == 'EXIT':
+        pass
+    elif option == 'H':
+        CLI_help_screen()
+    elif option == 'M':
+        CLI_create_menu()
+    elif option == 'S':
+        CLI_samples()
     else:
         print('Option:', option)
         raise SyntaxError('Invalid Option Selected')
@@ -218,7 +231,7 @@ def entry_exists(result):
     return len(search(result)) > 0
 
 
-## OLD py
+## OLD CLI.py #######################################
 
 import os
 import time
@@ -365,10 +378,10 @@ def CLI_delete():
 def CLI_samples():
     sample_str = """
                     Sample:
-                    MOST HAPPT COUNTRY
+                    MOST HAPPY COUNTRY
                     2 MOST HEALTHY SPANISH COUNTRIES
                     LEAST CORRUPT REGION 2016
-                    COUNTRIES            
+                    COUNTRY         
                     """
 
     print(sample_str)
@@ -392,7 +405,6 @@ def CLI_create_menu():
             print(option)
         selection = str.upper(input('Command: '))
     return selection
-
 
 
 main()
