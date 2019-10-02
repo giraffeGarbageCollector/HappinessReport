@@ -77,7 +77,7 @@ def insertCountryData(fileName):
     
     con = sqlite3.connect(":memory:")
     cur = con.cursor()
-    cur.execute("""CREATE TABLE IF NOT EXISTS GeneralData('Country','reigon','Languages')""")
+    cur.execute("""CREATE TABLE IF NOT EXISTS GeneralData('Country','Reigon','Languages')""")
     
     
     for row in csv_file:
@@ -116,11 +116,11 @@ def __find_qualifiers(search_upper_split):
 #REturns ordering syntax Unvalidated result returned
 def __find_rank(search_upper_split):
     found_rank = None
-    rank_lst = ['TOP', 'Bottom', 'MOST', 'LEAST']
-    for rank in rank_lst:
+    rank_dict = {'TOP': 'Desc', 'BOTTOM': 'Asc', 'MOST': 'Desc', 'LEAST': 'Asc'} #TODO Make sure that these are the correct sql orderings
+    for rank in rank_dict:
         if rank in search_upper_split:
             if found_rank is None:
-                found_rank = rank
+                found_rank = rank_dict[rank]
             else:
                 raise SyntaxError("Too Many Rank Modifiers Found")
     return found_rank
@@ -169,17 +169,33 @@ def search(search_str):
             nouns = __find_nouns(search_list_split)
             rank = __find_rank(search_list_split)
 
+
+
             if years:
                 for year in years:
-                    sql_query += "`Year` == " + year + " AND "
-            else:
-                sql_query += "`Year` == * AND "
-            for i in range(1,len(nouns)-1):
-                sql_query += "`" + nouns[i-1] + "`" + " == " + nouns[i]
+                    sql_query += "`Year` == " + year + " OR "
+                sql_query = sql_query.rsplit(' ', 1)[0] + ' ' #Remove the last "OR" from the sql query
+            sql_query += " ORDER BY "
+            if qualifiers:
+                for qual in qualifiers:
+                    pass ##TODO add qualifiers to query
+            #Nouns already validated since it is required and passed validate_query
+            for noun in nouns:
+                pass #TODO add nouns to query
+            if rank:
+                sql_query += " LIMIT " + rank
+
+
+            #TODO Submit query to db
+            results_raw = "THIS VALUE NEEDS TO BE CHANGED"
+
             #TODO Implement qualifier ordering and rank ordering with loops in similar fashion
         except SyntaxError:
             print("There was an Error in your search. Please check it and try again")
 
+        #Format results into Result format
+        for result in results_raw:
+           results.append(Result()) #TODO all the information from the result in the constructor
     return results
 
 def search_one(validated_search_str):
