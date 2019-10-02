@@ -130,7 +130,7 @@ def __find_rank(search_upper_split):
 #i.e. list = ['Country', 'United States', ....]
 def __find_nouns(search_upper_split):
     found_nouns = []
-    noun_lst = ['COUNTRY', 'LANGUAGE', 'REGION']
+    noun_lst = ['SPEAKS', 'IN'] #Language and Region
     for i in range(len(noun_lst)):
         if noun_lst[i] in search_upper_split:
             found_nouns.append(noun_lst[i])
