@@ -58,18 +58,20 @@ def option_handler(option):
 # No return value. Table name is RankTable
 
 def insertYearData(fileName):
-f = open(fileName)
-con = sqlite3.connect(":memory:")
-cur = con.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS RankTable('ID','YEAR','COUNTRY','HAPPY NOT SINGLE','RANK','HAPPY','WEALTHY');")
-param = "INSERT INTO 'RankTable' VALUES(?,?,?,?,?,?,?);"
+    f = open(fileName)
+    csv_file = csv.reader(f)
+    con = sqlite3.connect(":memory:")
+    cur = con.cursor()
+    cur.execute("CREATE TABLE IF NOT EXISTS RankTable('ID','YEAR','COUNTRY','HAPPY NOT SINGLE','RANK','HAPPY','WEALTHY');")
+    param = "INSERT INTO 'RankTable' VALUES(?,?,?,?,?,?,?);"
 
-next(csv_file)
-row in csv_file:
-    cur.execute(param, row)
-con.commit()
 
-con.close()
+    next(csv_file)
+    for row in csv_file:
+        cur.execute(param, row)
+    con.commit()
+
+    con.close()
 
 # Requires a csv file name as a string
 # Fills database with values in the csv file. No headers or it will give weird results
