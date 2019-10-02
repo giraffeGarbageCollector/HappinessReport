@@ -16,8 +16,7 @@ CLI_OPTIONS = {"[A]dd Year Data" :  " - Add data to the database [C]RUD",
                "[S]ample Queries": " - Show sample queries to try",
                }
 
-CLI_OPTIONS_LETTERS = [command[2] for command in CLI_OPTIONS.keys()] + [ESCAPE]
-CLI_OPTIONS_LETTERS.remove('E') #to remove exit double entry
+CLI_OPTIONS_LETTERS = [command[2] for command in CLI_OPTIONS.keys()]
 
 
 def CLI_exit_check(command):
