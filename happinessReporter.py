@@ -2,7 +2,7 @@ import csv
 import sqlite3
 from typing import List
 
-from CLI import *
+import CLI
 import Result  # for database interactions
 
 YEAR_MIN, YEAR_MAX = 2015, 2019
@@ -11,9 +11,9 @@ YEAR_MIN, YEAR_MAX = 2015, 2019
 def main():
     keep_alive = True  # Main sentinel for program
     while keep_alive:
-        menu_selec = CLI_create_menu()  # create a menu every time
+        menu_selec = CLI.CLI_create_menu()  # create a menu every time
 
-        if not CLI_exit_check(menu_selec):  # check before other function calls for exit command
+        if not CLI.CLI_exit_check(menu_selec):  # check before other function calls for exit command
             try:
                 option_handler(menu_selec)  # process command and get result string
             except SyntaxError:
@@ -28,9 +28,9 @@ def main():
 def option_handler(option):
     option = str.upper(option)
     result = None
-    options_dict = {'A': CLI_add_year(), 'B': CLI_search(), 'C': CLI_edit(),
-                    'D': CLI_delete(), 'EXIT': '', 'H': CLI_help_screen(),
-                    'M': CLI_create_menu(), 'S': CLI_samples()}
+    options_dict = {'A': CLI.CLI_add_year(), 'B': CLI.CLI_search(), 'C': CLI.CLI_edit(),
+                    'D': CLI.CLI_delete(), 'EXIT': '', 'H': CLI.CLI_help_screen(),
+                    'M': CLI.CLI_create_menu(), 'S': CLI.CLI_samples()}
 
     if option in options_dict:
         result = options_dict[option]

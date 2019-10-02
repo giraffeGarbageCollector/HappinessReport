@@ -1,6 +1,6 @@
 import os
 import time
-import happinessReporter
+
 
 
 
@@ -156,7 +156,7 @@ def CLI_samples():
     print(sample_str)
 
 
-#Returns the
+
 def CLI_create_menu():
     welcome_prompt = "Welcome to the Happiness Reporter!\n Please select from one of the options below:\n"
     selection = ''
@@ -174,3 +174,5 @@ def CLI_create_menu():
             print(option)
         selection = str.upper(input('Command: '))
     return selection
+
+import happinessReporter
