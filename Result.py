@@ -1,5 +1,3 @@
-
-
 class Result:
     __contents = dict()
 
@@ -12,6 +10,14 @@ class Result:
         self.__contents.update('rank', None)
         self.__contents.update('score', None)
         self.__contents.update('gdp', None)
+
+    def __init__(self, id_DB, country, year, rank, score, gdp):
+        self.__contents['id'] = id_DB
+        self.__contents['country'] = country
+        self.__contents['year'] = year
+        self.__contents['rank'] = rank
+        self.__contents['score'] = score
+        self.__contents['gdp'] = gdp
 
     def list_values(self):
         return_str = ''
