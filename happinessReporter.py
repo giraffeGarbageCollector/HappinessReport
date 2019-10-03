@@ -159,10 +159,10 @@ def search(search_str):
             elif "SPEAKING" in search_list_split:
                 sql_query += " GeneralData INNER JOIN RankTable ON GeneralData.country = RankTable.country WHERE GeneralData.languages LIKE \'%" + noun +"%\' "
         else:
-            sql_query += "RankTable WHERE "
+            sql_query += "RankTable "
         if years:
             for year in years:
-                sql_query += " Year = " + year + " OR "
+                sql_query += "  WHERE Year = " + year + " OR "
             sql_query = sql_query.rsplit(' ', 1)[0]  # Remove the last "OR" from the sql query
 
         if qualifiers:
