@@ -91,14 +91,14 @@ def insertCountryData(fileName):
 def __find_qualifiers(search_upper_split):
     found_quals = []
     qualifiers_lst = ['HAPPY', 'SUPPORTIVE', 'FREE', 'CORRUPT',
-                      'GENEROUS', 'WEALTHY', 'HEALTHY', 'TOP', 'BOTTOM']
+                      'GENEROUS', 'WEALTHY', 'HEALTHY']
     for qual in qualifiers_lst:
         if qual in search_upper_split:
             found_quals.append(qual)
     return found_quals
 
 
-# Returns ordering syntax Unvalidated result returned
+# REturns ordering syntax Unvalidated result returned
 def __find_rank(search_upper_split):
     found_rank = None
     rank_dict = {'TOP': 'DESC LIMIT 1', 'BOTTOM': 'ASC LIMIT 1', 'MOST': 'DESC',
@@ -117,9 +117,9 @@ def __find_rank(search_upper_split):
 def __find_nouns(search_upper_split):
     found_nouns = []
     noun_lst = ['SPEAKING', 'IN']  # Language and Region
-    for noun in noun_lst
-        if noun in search_upper_split:
-            found_nouns.append(noun)
+    for i in range(len(noun_lst)):
+        if noun_lst[i] in search_upper_split:
+            found_nouns.append(noun_lst[i])
     return found_nouns
 
 
@@ -166,13 +166,13 @@ def search(search_str):
             sql_query = sql_query.rsplit(' ', 1)[0]  # Remove the last "OR" from the sql query
 
         if qualifiers:
+            sql_query += " ORDER BY "
             if qualifiers and ("IN" in search_list_split or "SPEAKING" in search_list_split):
-                sql_query += " ORDER BY "
                 for qual in qualifiers:
                     sql_query += qual + ' '
                 if rank:
                     sql_query += rank
-            if search_limit and not ("TOP" or "BOTTOM" in qualifiers):
+            if search_limit:
                 sql_query += " LIMIT " + str(search_limit)
         sql_query += ';'
         print(sql_query)
@@ -249,7 +249,7 @@ def CLI_search():
     q_input = ''
     while "EXIT" not in q_input.upper():
         print("\nType \"EXIT\" to go back to main menu")
-        q_input = input("Search:").upper()
+        q_input = input("Search:")
         results = search(q_input)
         #Print Results
         if results:
