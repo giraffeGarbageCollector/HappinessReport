@@ -11,7 +11,7 @@ cur = con.cursor()
 
 def main():
     insertYearData("2015-2019.csv")
-    insertCountryData("CountriesData.csv")
+    insertCountryData("./dataset_world_happiness_report/CountriesData.csv")
     keep_alive = True  # Main sentinel for program
     while keep_alive:
         menu_selec = CLI_create_menu()  # create a menu every time
@@ -83,10 +83,10 @@ def insertYearData(fileName):
 def insertCountryData(fileName):
     f = open(fileName)
     csv_file = csv.reader(f)
-    param = """INSERT INTO 'GeneralData' VALUES(?,?,?);"""
+    param = "INSERT INTO 'GeneralData' VALUES(?,?,?);"
 
     #next(csv_file)
-    cur.execute("""CREATE TABLE IF NOT EXISTS GeneralData('Country','Reigon','Languages')""")
+    cur.execute("CREATE TABLE IF NOT EXISTS GeneralData('Country','Region','Languages')")
 
     for row in csv_file:
         cur.execute(param, row)
@@ -318,12 +318,12 @@ def search(search_str):
 
         # TODO Validate all of these parts
             if nouns:
-                if nouns == "IN":
-                    noun = search_list_split[search_list_split.len()]
-                    sql_query += "INNER JOIN GeneralData ON RankTable.country = GeneralTable WHERE GeneralData.region LIKE " + noun
-                elif nouns == "SPEAKING":
+                if "IN" in search_list_split:
+                    noun = search_list_split[-1]
+                    sql_query += "INNER JOIN GeneralData ON RankTable.country LIKE (SELECT GeneralData.region) WHERE Region LIKE " + noun
+                elif "SPEAKING" in search_list_split:
                     noun = search_list_split[search_list_split.len() - 1]
-                    sql_query += "INNER JOIN GeneralData ON RankTable.country = GeneralTable WHERE GeneralData.language LIKE " + noun
+                    sql_query += "INNER JOIN GeneralData ON RankTable.country = GeneralTable WHERE GeneralData.Language LIKE " + noun
             else:
                 sql_query += "WHERE "
             if years:
