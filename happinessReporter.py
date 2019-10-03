@@ -262,7 +262,7 @@ def __find_qualifiers(search_upper_split):
 # REturns ordering syntax Unvalidated result returned
 def __find_rank(search_upper_split):
     found_rank = None
-    rank_dict = {'TOP': 'Desc', 'BOTTOM': 'Asc', 'MOST': 'Desc',
+    rank_dict = {'TOP': 'DESC', 'BOTTOM': 'ASC', 'MOST': 'DESC',
                  'LEAST': 'Asc'}  # TODO Make sure that these are the correct sql orderings
     for rank in rank_dict:
         if rank in search_upper_split:
@@ -307,8 +307,7 @@ def __find_numbers_years(search_upper_split):
 # Returns the search results of a validated search string. If no results, return the empty array
 def search(search_str):
     if validate_query(search_str):
-        sql_query = "SELECT * FROM RankTable  "
-        descending_order = True
+        sql_query = "SELECT * FROM "
         search_list_split = search_str.upper().split()
         try:
             search_limit, years = __find_numbers_years(search_list_split)
@@ -318,28 +317,29 @@ def search(search_str):
 
         # TODO Validate all of these parts
             if nouns:
+                noun = search_list_split[-1]
                 if "IN" in search_list_split:
-                    noun = search_list_split[-1]
-                    sql_query += "INNER JOIN GeneralData ON RankTable.country LIKE (SELECT GeneralData.region) WHERE Region LIKE " + noun
+                    sql_query += " GeneralData INNER JOIN RankTable ON GeneralData.country = RankTable.country WHERE GeneralData.region LIKE \'%" + noun +"%\' "
                 elif "SPEAKING" in search_list_split:
-                    noun = search_list_split[search_list_split.len() - 1]
-                    sql_query += "INNER JOIN GeneralData ON RankTable.country = GeneralTable WHERE GeneralData.Language LIKE " + noun
+                    sql_query += " GeneralData INNER JOIN RankTable ON GeneralData.country = RankTable.country WHERE GeneralData.languages LIKE \'%" + noun +"%\' "
             else:
-                sql_query += "WHERE "
+                sql_query += "RankTable WHERE "
             if years:
                 for year in years:
-                    sql_query += " WHERE `Year` == " + year + " OR "
+                    sql_query += " Year = " + year + " OR "
                 sql_query = sql_query.rsplit(' ', 1)[0]  # Remove the last "OR" from the sql query
-            sql_query += " ORDER BY "
-            if qualifiers:
-                for qual in qualifiers:
-                    sql_query += qual + ' '
 
-            if rank:
-                sql_query += rank + ' '
-            if search_limit:
-                sql_query += " LIMIT " + search_limit
-        
+            if qualifiers:
+                sql_query += " ORDER BY "
+                if qualifiers and ("IN" in search_list_split or "SPEAKING" in search_list_split):
+                    for qual in qualifiers:
+                        sql_query += qual + ' '
+                    if rank:
+                        sql_query += rank
+                if search_limit:
+                    sql_query += " LIMIT " + search_limit
+            sql_query += ';'
+            print(sql_query)
             cur.execute(sql_query)
             results_tup = []
             results_raw = cur.fetchall()
