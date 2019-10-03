@@ -159,10 +159,10 @@ def search(search_str):
             elif "SPEAKING" in search_list_split:
                 sql_query += " GeneralData INNER JOIN RankTable ON GeneralData.country = RankTable.country WHERE GeneralData.languages LIKE \'%" + noun +"%\' "
         else:
-            sql_query += "RankTable "
+            sql_query += "RankTable WHERE "
         if years:
             for year in years:
-                sql_query += " WHERE Year = " + year + " OR "
+                sql_query += " Year = " + year + " OR "
             sql_query = sql_query.rsplit(' ', 1)[0]  # Remove the last "OR" from the sql query
 
         if qualifiers:
@@ -250,22 +250,31 @@ def CLI_search():
     while "EXIT" not in q_input.upper():
         print("\nType \"EXIT\" to go back to main menu")
         q_input = input("Search:")
+        check = q_input.upper().split()
         results = search(q_input)
         #Print Results
         if results:
+            if check[-1] == "SPEAKING" || check[-1] == "IN"
             print("RESULTS:\n")
             for result in results:
-                __print_result(result)
+                __print_result_general(result)
 
-
+            else:
+            print("RESULTS:\n")
+                for result in results:
+                    __print_result(result)
+            
 def __print_result(result_tuple):
     #Format ID, Year, Country, Rank, Score, GDP
+    if result_
     print("Country:", result_tuple[2], "Rank:", result_tuple[3],
           "Happiness Score:", result_tuple[4], "GDP:", result_tuple[5],
           "ID:", result_tuple[0])
 
 
-
+def __print_result_general(result_tuple):
+    if result_tuple_
+    print("Country:", result_tuple[0], "Region:", result_tuple[1],"Languages:", result_tuple[2])
 
 def CLI_samples():
     sample_str = """
