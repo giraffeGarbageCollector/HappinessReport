@@ -11,6 +11,7 @@ cur = con.cursor()
 
 def main():
     insertYearData("2015-2019.csv")
+    insertCountryData("CountriesData.csv")
     keep_alive = True  # Main sentinel for program
     while keep_alive:
         menu_selec = CLI_create_menu()  # create a menu every time
@@ -84,7 +85,7 @@ def insertCountryData(fileName):
     csv_file = csv.reader(f)
     param = """INSERT INTO 'GeneralData' VALUES(?,?,?);"""
 
-    next(csv_file)
+    #next(csv_file)
     cur.execute("""CREATE TABLE IF NOT EXISTS GeneralData('Country','Reigon','Languages')""")
 
     for row in csv_file:
@@ -315,8 +316,16 @@ def search(search_str):
             nouns = __find_nouns(search_list_split)
             rank = __find_rank(search_list_split)
 
-            # TODO Validate all of these parts
-
+        # TODO Validate all of these parts
+            if nouns:
+                if nouns == "IN":
+                    noun = search_list_split[search_list_split.len()]
+                    sql_query += "INNER JOIN GeneralData ON RankTable.country = GeneralTable WHERE GeneralData.region LIKE " + noun
+                elif nouns == "SPEAKING":
+                    noun = search_list_split[search_list_split.len() - 1]
+                    sql_query += "INNER JOIN GeneralData ON RankTable.country = GeneralTable WHERE GeneralData.language LIKE " + noun
+            else:
+                sql_query += "WHERE "
             if years:
                 for year in years:
                     sql_query += " WHERE `Year` == " + year + " OR "
@@ -330,13 +339,7 @@ def search(search_str):
                 sql_query += rank + ' '
             if search_limit:
                 sql_query += " LIMIT " + search_limit
-            if nouns:
-                if nouns == "IN":
-                    noun = search_list_split[search_list_split.len()]
-                    sql_query += "INNER JOIN GeneralData ON RankTable.country = GeneralTable WHERE GeneralData.region = " + noun
-                elif nouns == "SPEAKING":
-                    noun = search_list_split[search_list_split.len() - 1]
-                    sql_query += "INNER JOIN GeneralData ON RankTable.country = GeneralTable WHERE GeneralData.language LIKE " + noun
+        
             cur.execute(sql_query)
             results_tup = []
             results_raw = cur.fetchall()
@@ -346,6 +349,7 @@ def search(search_str):
         except SyntaxError:
             print("There was an Error in your search. Please check it and try again")
             return
+
 
 
 def search_one(validated_search_str):
