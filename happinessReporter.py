@@ -230,7 +230,7 @@ def validate_query(query_str):
     #
     # else:
     #     return False
-    return TrueB
+    return True
 
 
 
