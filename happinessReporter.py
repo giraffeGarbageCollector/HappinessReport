@@ -1,8 +1,8 @@
 import csv
 import sqlite3
 from typing import List
+import copy
 
-from Result import Result as Result# for database interactions
 
 YEAR_MIN, YEAR_MAX = 2015, 2019
 con = sqlite3.connect(":memory:")
@@ -37,8 +37,6 @@ def option_handler(option):
         CLI_search()
     elif option == 'B':
         CLI_search()
-    elif option == 'C':
-        CLI_edit()
     elif option == 'D':
         CLI_delete()
     elif option == 'EXIT':
@@ -96,141 +94,143 @@ def insertCountryData(fileName):
 
 #TODO Refactor
 def validate_query(query_str):
-    qualifiers_lst = ['HAPPY', 'SUPPORTIVE', 'FREE', 'CORRUPT', 'GENEROUS', 'WEALTHY', 'HEALTHY']
-    year_lst = ["2015", "2016", "2017", "2018", "2019"]
-    rank_lst = ['TOP', 'Bottom', 'MOST', 'LEAST']
-
-    splited_input = query_str.split()
-    ## 2 most happy country region 2015
-    if splited_input[0].isdigit():
-        if splited_input[1] not in rank_lst:
-            return False
-        else:
-            if splited_input[2] not in qualifiers_lst:
-                return False
-            else:
-                if splited_input[3] !="COUNTRY":
-                    return False
-                else:
-                    # 2 most happy country
-                    if len(splited_input) == 4:
-                        if splited_input[3] == "COUNTRY":
-                            return True
-                        else:
-                            return False
-                    # 2 most happy country 2015
-                    elif len(splited_input) == 5:
-                        if splited_input[4] != "COUNTRY":
-                            if splited_input[4] in year_lst:
-                                return True
-                            else:
-                                return False
-                        else:
-                            return False
-                    # 2 most happy country in region
-                    # 2 most happy country language speaking
-                    elif len(splited_input) == 6:
-                        if splited_input[4] != "IN" and splited_input[4] != "LANGUAGE":
-                            return False
-                        else:
-                            if splited_input[4] == "IN":
-                                if splited_input[5] == "REGION":
-                                    return True
-                                else:
-                                    return False
-                            elif splited_input[4] == "LANGUAGE":
-                                if splited_input[5] == "SPEAKING":
-                                    return True
-                                else:
-                                    return False
-                    # 2 most happy country in region 2015
-                    # 2 most happy country language speaking 2015
-                    elif len(splited_input) == 7:
-                        if splited_input[4] != "IN" and splited_input[4] != "LANGUAGE":
-                            return False
-                        else:
-                            if splited_input[4] == "IN":
-                                if splited_input[5] == "REGION":
-                                    if splited_input[6] in year_lst:
-                                        return True
-                                    else:
-                                        return False
-                                else:
-                                    return False
-                            elif splited_input[4] == "LANGUAGE":
-                                if splited_input[5] == "SPEAKING":
-                                    if splited_input[6] in year_lst:
-                                        return True
-                                    else:
-                                        return False
-                                else:
-                                    return False
-
-
-    ################################ most happy country region 2015 ############################
-    elif splited_input[0] in rank_lst:
-        if splited_input[1] not in qualifiers_lst:
-            return False
-        else:
-            if splited_input[2] != "COUNTRY":
-                return False
-            else:
-                # length 3, 4, 5
-                if len(splited_input) == 3:
-                    if splited_input[2] == "COUNTRY":
-                        return True
-                    else:
-                        return False
-                # 2 most happy country 2015
-                elif len(splited_input) == 4:
-                    if splited_input[3] != "COUNTRY":
-                        if splited_input[3] in year_lst:
-                            return True
-                        else:
-                            return False
-                    else:
-                        return False
-                # 2 most happy country in region
-                # 2 most happy country language speaking
-                elif len(splited_input) == 5:
-                    if splited_input[3] != "IN" and splited_input[3] != "LANGUAGE":
-                        return False
-                    else:
-                        if splited_input[3] == "IN":
-                            if splited_input[4] == "REGION":
-                                return True
-                            else:
-                                return False
-                        elif splited_input[3] == "LANGUAGE":
-                            if splited_input[4] == "SPEAKING":
-                                return True
-                            else:
-                                return False
-                # 2 most happy country in region 2015
-                # 2 most happy country language speaking 2015
-                elif len(splited_input) == 6:
-                    if splited_input[3] != "IN" and splited_input[3] != "LANGUAGE":
-                        return False
-                    else:
-                        if splited_input[3] == "IN":
-                            if splited_input[4] == "REGION":
-                                if splited_input[5] in year_lst:
-                                    return True
-                                else:
-                                    return False
-                            else:
-                                return False
-                        elif splited_input[3] == "LANGUAGE":
-                            if splited_input[4] == "SPEAKING":
-                                if splited_input[5] in year_lst:
-                                    return True
-                                else:
-                                    return False
-                            else:
-                                return False
-
-    else:
-        return False
+    # qualifiers_lst = ['HAPPY', 'SUPPORTIVE', 'FREE', 'CORRUPT', 'GENEROUS', 'WEALTHY', 'HEALTHY']
+    # year_lst = ["2015", "2016", "2017", "2018", "2019"]
+    # rank_lst = ['TOP', 'Bottom', 'MOST', 'LEAST']
+    # region_lst = ['Asia', 'North America','South America','Africa','Europe']
+    #
+    # splited_input = query_str.split()
+    # ## 2 most happy country region 2015
+    # if splited_input[0].isdigit():
+    #     if splited_input[1] not in rank_lst:
+    #         return False
+    #     else:
+    #         if splited_input[2] not in qualifiers_lst:
+    #             return False
+    #         else:
+    #             if splited_input[3] !="COUNTRY":
+    #                 return False
+    #             else:
+    #                 # 2 most happy country
+    #                 if len(splited_input) == 4:
+    #                     if splited_input[3] == "COUNTRY":
+    #                         return True
+    #                     else:
+    #                         return False
+    #                 # 2 most happy country 2015
+    #                 elif len(splited_input) == 5:
+    #                     if splited_input[4] != "COUNTRY":
+    #                         if splited_input[4] in year_lst:
+    #                             return True
+    #                         else:
+    #                             return False
+    #                     else:
+    #                         return False
+    #                 # 2 most happy country in region
+    #                 # 2 most happy country language speaking
+    #                 elif len(splited_input) == 6:
+    #                     if splited_input[4] != "IN" and splited_input[4] != "LANGUAGE":
+    #                         return False
+    #                     else:
+    #                         if splited_input[4] == "IN":
+    #                             if splited_input[5] in region_lst:
+    #                                 return True
+    #                             else:
+    #                                 return False
+    #                         elif splited_input[4] == "LANGUAGE":
+    #                             if splited_input[5] == "SPEAKING":
+    #                                 return True
+    #                             else:
+    #                                 return False
+    #                 # 2 most happy country in region 2015
+    #                 # 2 most happy country language speaking 2015
+    #                 elif len(splited_input) == 7:
+    #                     if splited_input[4] != "IN" and splited_input[4] != "LANGUAGE":
+    #                         return False
+    #                     else:
+    #                         if splited_input[4] == "IN":
+    #                             if splited_input[5] in region_lst:
+    #                                 if splited_input[6] in year_lst:
+    #                                     return True
+    #                                 else:
+    #                                     return False
+    #                             else:
+    #                                 return False
+    #                         elif splited_input[4] == "LANGUAGE":
+    #                             if splited_input[5] == "SPEAKING":
+    #                                 if splited_input[6] in year_lst:
+    #                                     return True
+    #                                 else:
+    #                                     return False
+    #                             else:
+    #                                 return False
+    #
+    #
+    # ################################ most happy country region 2015 ############################
+    # elif splited_input[0] in rank_lst:
+    #     if splited_input[1] not in qualifiers_lst:
+    #         return False
+    #     else:
+    #         if splited_input[2] != "COUNTRY":
+    #             return False
+    #         else:
+    #             # length 3, 4, 5
+    #             if len(splited_input) == 3:
+    #                 if splited_input[2] == "COUNTRY":
+    #                     return True
+    #                 else:
+    #                     return False
+    #             # 2 most happy country 2015
+    #             elif len(splited_input) == 4:
+    #                 if splited_input[3] != "COUNTRY":
+    #                     if splited_input[3] in year_lst:
+    #                         return True
+    #                     else:
+    #                         return False
+    #                 else:
+    #                     return False
+    #             # 2 most happy country in region
+    #             # 2 most happy country language speaking
+    #             elif len(splited_input) == 5:
+    #                 if splited_input[3] != "IN" and splited_input[3] != "LANGUAGE":
+    #                     return False
+    #                 else:
+    #                     if splited_input[3] == "IN":
+    #                         if splited_input[4] in region_lst:
+    #                             return True
+    #                         else:
+    #                             return False
+    #                     elif splited_input[3] == "LANGUAGE":
+    #                         if splited_input[4] == "SPEAKING":
+    #                             return True
+    #                         else:
+    #                             return False
+    #             # 2 most happy country in region 2015
+    #             # 2 most happy country language speaking 2015
+    #             elif len(splited_input) == 6:
+    #                 if splited_input[3] != "IN" and splited_input[3] != "LANGUAGE":
+    #                     return False
+    #                 else:
+    #                     if splited_input[3] == "IN":
+    #                         if splited_input[4] in region_lst:
+    #                             if splited_input[5] in year_lst:
+    #                                 return True
+    #                             else:
+    #                                 return False
+    #                         else:
+    #                             return False
+    #                     elif splited_input[3] == "LANGUAGE":
+    #                         if splited_input[4] == "SPEAKING":
+    #                             if splited_input[5] in year_lst:
+    #                                 return True
+    #                             else:
+    #                                 return False
+    #                         else:
+    #                             return False
+    #
+    # else:
+    #     return False
+    return TrueB
 
 
 
@@ -305,7 +305,6 @@ def __find_numbers_years(search_upper_split):
 
 # Returns the search results of a validated search string. If no results, return the empty array
 def search(search_str):
-    results = []
     if validate_query(search_str):
         sql_query = "SELECT * FROM RankTable  "
         descending_order = True
@@ -339,20 +338,14 @@ def search(search_str):
                     noun = search_list_split[search_list_split.len() - 1]
                     sql_query += "INNER JOIN GeneralData ON RankTable.country = GeneralTable WHERE GeneralData.language LIKE " + noun
             cur.execute(sql_query)
+            results_tup = []
             results_raw = cur.fetchall()
-
             for result in results_raw:
-                id = result[0]
-                year = result[1]
-                country  = result[2]
-                rank = result[3]
-                score = result[4]
-                gdp = result[5]
-                results.append(Result(id, country, year, rank, score, gdp))
+                results_tup.append(result)
+            return results_tup
         except SyntaxError:
             print("There was an Error in your search. Please check it and try again")
-
-    return results
+            return
 
 
 def search_one(validated_search_str):
@@ -374,7 +367,6 @@ MENU = "MENU"
 ESCAPE = "EXIT"
 CLI_OPTIONS = {"[A]dd Year Data" :  " - Add data to the database [C]RUD",
                "[B]rowse/Search Data": " - Search the database C[R]UD",
-               "[C]hange Data": " - Edit database entries CR[U]D",
                "[D]elete an Entry": " - Delete a database entry CRRU[D]",
                 ESCAPE + " (works everywhere)": " - Exit the program now",
                 "[H]elp": " - This menu",
@@ -438,53 +430,13 @@ def CLI_search():
                 __print_result(result)
 
 
-def __print_result(result):
-    print("Country:", result.get_country(), "Rank:", result.get_rank(),
-          "Happiness Score:", result.get_score(), "GDP:", result.get_gdp(),
-          "ID:", result.get_id())
-
-def __edit_result(result):
-    while ESCAPE not in usr_in.upper():
-        print("Here is the data for", result.get_country())
-        print(result.list_values())
-
-        usr_in = input("What Would You Like To Change? (Type \"exit\" to go back to edit menu): ")
-        field_in = usr_in.upper()
-        if not CLI_exit_check(field_in) and result.is_valid_field(field_in.lower()):
-            value_in = input("New Value: ")
-
-            if not CLI_exit_check(value_in):
-                print("New Value:", value_in)
-                valid_in = input("Is This Correct? y/n")
-
-                if valid_in.upper() == 'Y':
-                    print("Updating Record", end="")
-                    update_record(result.get_id(), field_in, value_in)
-
-                else:
-                    print("Not Updating Record", end="")
-
-                for i in range(3):
-                    print(".", end="")
-                    time.sleep(.3)
-                print("Record for ", result.get_country(), ":\n", result.list_values(), sep='')
-
-            else:
-                print("Invalid Field")
+def __print_result(result_tuple):
+    #Format ID, Year, Country, Rank, Score, GDP
+    print("Country:", result_tuple[2], "Rank:", result_tuple[3],
+          "Happiness Score:", result_tuple[4], "GDP:", result_tuple[5],
+          "ID:", result_tuple[0])
 
 
-
-def CLI_edit():
-    cli_input = ''
-    while MENU not in cli_input.upper():
-        print("Type \"menu\" to go back to main menu")
-        cli_input = input("ID of entry to edit")
-        if entry_exists(cli_input):
-            entry = search("ID " , cli_input)
-            __print_result(entry)
-            __edit_result(entry)
-        else:
-            print("Sorry, We could not find entry with that ID")
 
 
 def CLI_delete():
@@ -521,7 +473,6 @@ def CLI_samples():
                     """
 
     print(sample_str)
-
 
 
 def CLI_create_menu():

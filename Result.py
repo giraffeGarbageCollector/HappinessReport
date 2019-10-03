@@ -11,19 +11,15 @@ class Result:
         self.__contents.update('score', None)
         self.__contents.update('gdp', None)
 
-    def __init__(self, id_DB, country, year, rank, score, gdp):
-        self.__contents['id'] = id_DB
-        self.__contents['country'] = country
-        self.__contents['year'] = year
-        self.__contents['rank'] = rank
-        self.__contents['score'] = score
-        self.__contents['gdp'] = gdp
+    def __init__(self, tupple_result):
+        self.__contents['id'] = tupple_result[0]
+        self.__contents['year'] = tupple_result[1]
+        self.__contents['country'] = tupple_result[2]
+        self.__contents['rank'] = tupple_result[3]
+        self.__contents['score'] = tupple_result[4]
+        self.__contents['gdp'] = tupple_result[5]
 
-    def list_values(self):
-        return_str = ''
-        for field in self.__contents:
-            if self.__contents[field] is not None:
-                return_str += "Field: " +field + ", Value: " + self.__contents[field] + "\n"
+
 
         return return_str
 
