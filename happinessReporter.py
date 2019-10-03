@@ -254,26 +254,23 @@ def CLI_search():
         results = search(q_input)
         #Print Results
         if results:
-            if check[-1] == "SPEAKING" || check[-1] == "IN"
-            print("RESULTS:\n")
-            for result in results:
-                __print_result_general(result)
-
+            if check[-1] == "SPEAKING" or check[-1] == "IN":
+                print("RESULTS:\n")
+                for result in results:
+                    __print_result_general(result)
             else:
-            print("RESULTS:\n")
+                print("RESULTS:\n")
                 for result in results:
                     __print_result(result)
             
 def __print_result(result_tuple):
     #Format ID, Year, Country, Rank, Score, GDP
-    if result_
     print("Country:", result_tuple[2], "Rank:", result_tuple[3],
           "Happiness Score:", result_tuple[4], "GDP:", result_tuple[5],
           "ID:", result_tuple[0])
 
 
 def __print_result_general(result_tuple):
-    if result_tuple_
     print("Country:", result_tuple[0], "Region:", result_tuple[1],"Languages:", result_tuple[2])
 
 def CLI_samples():
