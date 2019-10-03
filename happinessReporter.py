@@ -1,5 +1,6 @@
 import csv
 import sqlite3
+import os
 from typing import List
 
 YEAR_MIN, YEAR_MAX = 2015, 2019
@@ -30,16 +31,10 @@ def option_handler(option):
     option = str.upper(option)
     result = None
 
-    if option == 'A':
-        CLI_add_year()
-    elif  option == 'B':
+    if option == 'Q':
         CLI_search()
-    elif option == 'B':
-        CLI_search()
-    elif option == 'D':
-        CLI_delete()
     elif option == 'EXIT':
-        pass
+        exit(0)
     elif option == 'H':
         CLI_help_screen()
     elif option == 'M':
@@ -49,7 +44,7 @@ def option_handler(option):
     else:
         print('Option:', option)
         raise SyntaxError('Invalid Option Selected')
-
+    print(option)
     return result
 
 
@@ -106,8 +101,8 @@ def __find_qualifiers(search_upper_split):
 # REturns ordering syntax Unvalidated result returned
 def __find_rank(search_upper_split):
     found_rank = None
-    rank_dict = {'TOP': 'DESC', 'BOTTOM': 'ASC', 'MOST': 'DESC',
-                 'LEAST': 'Asc'}  # TODO Make sure that these are the correct sql orderings
+    rank_dict = {'TOP': 'DESC LIMIT 1', 'BOTTOM': 'ASC LIMIT 1', 'MOST': 'DESC',
+                 'LEAST': 'ASC'}
     for rank in rank_dict:
         if rank in search_upper_split:
             if found_rank is None:
@@ -125,7 +120,6 @@ def __find_nouns(search_upper_split):
     for i in range(len(noun_lst)):
         if noun_lst[i] in search_upper_split:
             found_nouns.append(noun_lst[i])
-    #            found_nouns.append(noun_lst[i+1]) #TODO Needs validation that it is grabbing noun
     return found_nouns
 
 
@@ -158,7 +152,6 @@ def search(search_str):
         nouns = __find_nouns(search_list_split)
         rank = __find_rank(search_list_split)
 
-    # TODO Validate all of these parts
         if nouns:
             noun = search_list_split[-1]
             if "IN" in search_list_split:
@@ -204,16 +197,9 @@ def entry_exists(result):
     return len(search(result)) > 0
 
 
-## OLD CLI.py #######################################
-
-import os
-import time
-
 MENU = "MENU"
 ESCAPE = "EXIT"
-CLI_OPTIONS = {"[A]dd Year Data" :  " - Add data to the database [C]RUD",
-               "[B]rowse/Search Data": " - Search the database C[R]UD",
-               "[D]elete an Entry": " - Delete a database entry CRRU[D]",
+CLI_OPTIONS = {"[Q]uery Data": " - Search the database C[R]UD",
                 ESCAPE + " (works everywhere)": " - Exit the program now",
                 "[H]elp": " - This menu",
                 "[M]enu This Menu": " - Diplay the menu again" ,
@@ -224,7 +210,8 @@ CLI_OPTIONS_LETTERS = [command[1] for command in CLI_OPTIONS.keys()]
 
 
 def CLI_exit_check(command):
-    return command.upper() == 'EXIT'
+    if 'EXIT' in command.upper():
+        exit(0)
 
 def CLI_add_year():
     filename_input = input('Please type file name. Or, type absolute path if not in working directory: ')
@@ -280,30 +267,6 @@ def __print_result(result_tuple):
 
 
 
-def CLI_delete():
-    cli_input = ''
-    while MENU not in cli_input.upper():
-        print("Type \"menu\" to go back to main menu")
-        cli_input = input("ID of entry to delete")
-        entry = search_one("ID " + cli_input)
-        if entry:
-            print("Is This Right?")
-            __print_result(entry)
-            cli_input = input("Confimation to DELETE, permanently,", entry.get_Country,
-                              "\n with ID", entry.get_ID, "(case sensitive) Y/N:")
-            if cli_input in 'Y':
-                print("Deleting Record", end="")
-                remove_record(entry)
-            else:
-                print("Not Deleting Record", end="")
-
-            for i in range(3):
-                print(".", end="")
-                time.sleep(.3)
-        else:
-            print("Sorry, We could not find entry with that ID")
-
-
 def CLI_samples():
     sample_str = """
                     Sample:
@@ -332,6 +295,7 @@ def CLI_create_menu():
         for option in CLI_OPTIONS:
             print(option)
         selection = str.upper(input('Command: '))
+        CLI_exit_check(selection)
     return selection
 
 
