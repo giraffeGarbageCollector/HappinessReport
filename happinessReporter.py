@@ -4,7 +4,7 @@ import os
 from typing import List
 
 YEAR_MIN, YEAR_MAX = 2015, 2019
-con = sqlite3.connect(":memory:")
+con = sqlite3.connect("db.sqlite")
 cur = con.cursor()
 
 
